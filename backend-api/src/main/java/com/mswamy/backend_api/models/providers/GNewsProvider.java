@@ -12,7 +12,8 @@ public record GNewsProvider(List<Article> articles) {
             String description,
             String url,
             String publishedAt,
-            Source source) {
+            Source source,
+            String image) {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

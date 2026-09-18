@@ -15,6 +15,14 @@ public record GuardianProvider(ResponseData response) {
     public record Article(
             @JsonProperty("webTitle") String title,
             @JsonProperty("webUrl") String url,
-            @JsonProperty("webPublicationDate") String publishedDate) {
+            @JsonProperty("webPublicationDate") String publishedDate,
+            Fields fields) {
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public record Fields(
+            String trailText,
+            String thumbnail // Catches The Guardian thumbnail
+    ) {
     }
 }

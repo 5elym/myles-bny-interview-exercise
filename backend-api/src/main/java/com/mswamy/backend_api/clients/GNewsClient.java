@@ -39,6 +39,7 @@ public class GNewsClient implements NewsProvider {
                 article.description(),
                 article.url(),
                 article.publishedAt(),
-                article.source().name());
+                article.source().name(),
+                article.image());
     }
 }
