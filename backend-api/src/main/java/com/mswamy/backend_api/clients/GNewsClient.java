@@ -20,7 +20,7 @@ public class GNewsClient implements NewsProvider {
     @Override
     public List<ArticleDTO> fetchArticles(String query) {
         GNewsProvider response = restClient.get()
-                .uri("https://gnews.io/api/v4/search?q={query}&apikey={apiKey}", query, apiKey)
+                .uri("https://gnews.io/api/v4/search?q={query}&lang=en&apikey={apiKey}", query, apiKey)
                 .retrieve()
                 .body(GNewsProvider.class);
 
