@@ -1,7 +1,5 @@
-import { useState } from "react";
-
-import ArticleCard from "./components/ArticleCard";
 import type { Article } from "./models/Article";
+import ResultsGrid from "./views/ResultsGrid";
 
 function App() {
   const dummyArticle: Article = {
@@ -17,9 +15,7 @@ function App() {
 
   return (
     <>
-      <div className="p-8">
-        <ArticleCard article={dummyArticle} />
-      </div>
+      <ResultsGrid query={'"stargate sg1"'} /> {/* Default value for now */}
     </>
   );
 }

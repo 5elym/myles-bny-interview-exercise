@@ -3,15 +3,16 @@ package com.mswamy.backend_api.clients;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 import com.mswamy.backend_api.models.ArticleDTO;
-import com.mswamy.backend_api.models.providers.GNewsProvider;
 import com.mswamy.backend_api.models.providers.GuardianProvider;
 import com.mswamy.backend_api.services.NewsProvider;
 
 @Service
+@Order(2)
 public class GuardianClient implements NewsProvider {
     @Value("${guardian.api.key}")
     private String apiKey;
@@ -39,9 +40,14 @@ public class GuardianClient implements NewsProvider {
         return new ArticleDTO(
                 article.title(),
                 article.fields() != null ? article.fields().trailText() : null,
-                article.url(),
                 article.publishedDate(),
+                article.url(),
                 "The Guardian",
                 article.fields() != null ? article.fields().thumbnail() : null);
+    }
+
+    @Override
+    public String getName() {
+        return "The Guardian";
     }
 }

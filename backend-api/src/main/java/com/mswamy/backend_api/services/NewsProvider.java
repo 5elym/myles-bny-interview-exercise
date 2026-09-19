@@ -5,4 +5,6 @@ import java.util.*;
 
 public interface NewsProvider {
     List<ArticleDTO> fetchArticles(String query);
+
+    String getName(); // For error checking
 }

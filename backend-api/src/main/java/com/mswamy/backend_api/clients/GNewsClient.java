@@ -3,6 +3,7 @@ package com.mswamy.backend_api.clients;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -11,6 +12,7 @@ import com.mswamy.backend_api.models.providers.GNewsProvider;
 import com.mswamy.backend_api.services.NewsProvider;
 
 @Service
+@Order(1)
 public class GNewsClient implements NewsProvider {
     @Value("${gnews.api.key}")
     private String apiKey;
@@ -37,9 +39,14 @@ public class GNewsClient implements NewsProvider {
         return new ArticleDTO(
                 article.title(),
                 article.description(),
-                article.url(),
                 article.publishedAt(),
+                article.url(),
                 article.source().name(),
                 article.image());
+    }
+
+    @Override
+    public String getName() {
+        return "GNews";
     }
 }
