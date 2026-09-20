@@ -2,19 +2,47 @@ import { useState } from "react";
 
 import XMarkIcon from "@heroicons/react/20/solid/XMarkIcon";
 
-// Pass a function as a prop so the SearchBar can tell App.tsx when a search happens
 export default function SearchBar({ onSearch }: { onSearch: (query: string) => void }) {
   const [text, setText] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  // Dummy history for demonstration purposes
-  const fakeHistory = ["Doctor Who", "No Man's Sky", "Climate Change", "1963"];
+  const [searchHistory, setSearchHistory] = useState<string[]>(() => {
+    const savedHistory = localStorage.getItem("searchHistory");
+    return savedHistory ? JSON.parse(savedHistory) : [];
+  });
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (text.trim()) {
       onSearch(text);
+      saveSearchHistory(text);
+      setIsMenuOpen(false);
+
+      if (document.activeElement instanceof HTMLFormElement) {
+        document.activeElement.blur();
+      }
     }
+  };
+
+  const saveSearchHistory = (query: string) => {
+    setSearchHistory((prevHistory) => {
+      // Remove duplicates and add the new search to the top
+      const updatedHistory = [query, ...prevHistory.filter((item) => item !== query)];
+      const finalHistory = updatedHistory.slice(0, 5); // Keep only the last 5 searches
+
+      localStorage.setItem("searchHistory", JSON.stringify(finalHistory));
+
+      return finalHistory;
+    });
+  };
+
+  const deleteSearchHistoryItem = (index: number) => {
+    setSearchHistory((prev) => {
+      const updated = prev.filter((_, i) => i !== index);
+
+      localStorage.setItem("searchHistory", JSON.stringify(updated));
+
+      return updated;
+    });
   };
 
   const handleHistoryClick = (recentSearch: string) => {
@@ -47,18 +75,18 @@ export default function SearchBar({ onSearch }: { onSearch: (query: string) => v
         </button>
       </form>
 
-      {isMenuOpen && (
+      {isMenuOpen && searchHistory.length > 0 && (
         <div className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-content-muted/20 bg-surface shadow-xl">
           <ul className="flex flex-col py-2">
             <li className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-content-muted">Recent</li>
 
-            {fakeHistory.map((item, index) => (
+            {searchHistory.map((item, index) => (
               <li
                 key={item + index}
                 className="flex cursor-pointer items-center gap-3 px-4 py-3 text-content transition-colors hover:bg-base"
                 onMouseDown={(e) => {
-                  e.preventDefault();
                   handleHistoryClick(item);
+                  setIsMenuOpen(false);
                 }}
               >
                 <span className="truncate">{item}</span>
@@ -67,8 +95,7 @@ export default function SearchBar({ onSearch }: { onSearch: (query: string) => v
                   onMouseDown={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
-                    fakeHistory.splice(index, 1);
-                    setIsMenuOpen(true);
+                    deleteSearchHistoryItem(index);
                   }}
                 />
               </li>
