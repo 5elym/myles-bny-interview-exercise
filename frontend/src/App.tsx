@@ -1,5 +1,8 @@
+import { useState } from "react";
+import SearchBar from "./components/SearchBar";
 import type { Article } from "./models/Article";
 import ResultsGrid from "./views/ResultsGrid";
+import "./index.css";
 
 function App() {
   const dummyArticle: Article = {
@@ -13,9 +16,48 @@ function App() {
     source: "Screen Rant",
   };
 
+  const [hasSearched, setHasSearched] = useState(false);
+  const [userQuery, setUserQuery] = useState("");
+
+  const executeSearch = async (searchQuery: string) => {
+    setHasSearched(true);
+    setUserQuery(searchQuery);
+  };
+
   return (
     <>
-      <ResultsGrid query={'"stargate sg1"'} /> {/* Default value for now */}
+      <div className="flex min-h-screen flex-col bg-base">
+        <header
+          className={`relative flex w-full justify-center transition-all duration-700 ease-in-out ${
+            hasSearched ? "border-content-muted bg-surface py-5 shadow-sm" : "bg-transparent pt-[45vh]"
+          }`}
+        >
+          {/* Website Logo*/}
+          <h1
+            className={`absolute whitespace-nowrap font-bold text-primary transition-all duration-700 ease-in-out ${
+              hasSearched
+                ? "left-8 top-1/2 -translate-y-1/2 translate-x-0 text-2xl"
+                : "left-1/2 top-[35vh] -translate-x-1/2 translate-y-0 text-5xl tracking-tight"
+            }`}
+          >
+            <a href="/">NewsIntelligence</a>
+          </h1>
+
+          {/* Search Bar */}
+          <div
+            className={`w-full px-6 transition-all duration-700 ease-in-out ${hasSearched ? "max-w-4xl" : "max-w-3xl"}`}
+          >
+            <SearchBar onSearch={executeSearch} />
+          </div>
+        </header>
+
+        {/* Search Results */}
+        {hasSearched && (
+          <main className="w-full grow p-8">
+            <ResultsGrid query={userQuery} />
+          </main>
+        )}
+      </div>
     </>
   );
 }

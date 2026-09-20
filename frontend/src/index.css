@@ -1,1 +1,48 @@
 @import "tailwindcss";
+
+@theme {
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+
+  --color-base: var(--base); /* The main app background */
+  --color-surface: var(--surface); /* The background of cards/navbars */
+  --color-content: var(--content); /* Main text color */
+  --color-content-muted: var(--content-muted); /* Subtitles, dates, borders */
+}
+
+@layer base {
+  /* Light Mode */
+
+  :root {
+    --primary: #ff3535;
+    --primary-hover: #ca0c0c;
+
+    --base: #f9fafb;
+    --surface: #ffffff;
+    --content: #111827;
+    --content-muted: #6b7280;
+  }
+
+  /* Dark Mode */
+
+  /* @media (prefers-color-scheme: dark) {
+    :root {
+      --primary: #ff3535;
+      --primary-hover: #ca0c0c;
+
+      --base: #09090b;
+      --surface: #18181b;
+      --content: #f9fafb;
+      --content-muted: #a1a1aa;
+    }
+  } */
+
+  :root.dark {
+    --primary: #ff3535;
+    --primary-hover: #ca0c0c;
+    --base: #09090b;
+    --surface: #18181b;
+    --content: #f9fafb;
+    --content-muted: #a1a1aa;
+  }
+}
