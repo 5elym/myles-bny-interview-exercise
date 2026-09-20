@@ -29,7 +29,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
           </div>
 
           {/* White panel at bottom of card */}
-          <div className="flex flex-col max-h-[70%] bg-white px-4 py-3 pt-0 transition-all duration-500 ease-in-out group-hover:pt-4">
+          <div className="flex flex-col max-h-[70%] bg-surface px-4 py-3 pt-0 transition-all duration-500 ease-in-out group-hover:pt-4">
             {/* Summary that expands on hover */}
             <div className="flex-1 grid grid-rows-[0fr] min-h-0 transition-[grid-template-rows] duration-500 ease-in-out group-hover:grid-rows-[1fr]">
               <div className="overflow-hidden flex flex-col min-h-0">
@@ -41,7 +41,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
                     href={article.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block w-fit text-sm font-semibold text-sky-500 hover:text-sky-600"
+                    className="inline-block w-fit text-sm font-semibold text-primary hover:text-primary-hover"
                   >
                     Read more <ArrowTopRightOnSquareIcon className="ml-1 mb-0.5 inline h-4 w-4" />
                   </a>
@@ -51,8 +51,8 @@ export default function ArticleCard({ article }: ArticleCardProps) {
 
             {/* Footer for the card */}
             <div className="mt-auto flex items-center justify-between border-t border-gray-100 pt-2 text-xs font-semibold">
-              <span className="text-gray-400">{new Date(article.publicationDate).toDateString()}</span>
-              <span className="text-sky-600">{article.source}</span>
+              <span className="text-content-muted">{new Date(article.publicationDate).toDateString()}</span>
+              <span className="text-primary font-bold">{article.source}</span>
             </div>
           </div>
         </div>

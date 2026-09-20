@@ -12,24 +12,24 @@ export default function ResultsGrid({ query }: resultsGridProps) {
 
   // For testing to extract query params
   const urlParams = new URLSearchParams(window.location.search);
-  const searchQuery = urlParams.get("q") || query || "doctor who";
+  const searchQuery = urlParams.get("q") || query || "doctor who"; // default
 
   useEffect(() => {
-    const loadInitialData = async () => {
+    const loadArticles = async () => {
       try {
-        const results = await fetchArticlesByQuery(searchQuery);
+        const results = await fetchArticlesByQuery('"' + searchQuery + '"');
         setArticles(results);
       } catch (err) {
         // TODO: Show error to UI probably later
       }
     };
 
-    loadInitialData();
-  }, []);
+    loadArticles();
+  }, [query]);
 
   return (
     <>
-      <main className="p-8 bg-gray-50 min-h-screen">
+      <main className="p-8 bg-base min-h-screen">
         <h1 className="text-3xl font-bold mb-8">Results for: {searchQuery}</h1>
 
         {/* Main grid layout */}
