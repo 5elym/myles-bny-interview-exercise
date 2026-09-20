@@ -25,18 +25,6 @@
 
   /* Dark Mode */
 
-  /* @media (prefers-color-scheme: dark) {
-    :root {
-      --primary: #ff3535;
-      --primary-hover: #ca0c0c;
-
-      --base: #09090b;
-      --surface: #18181b;
-      --content: #f9fafb;
-      --content-muted: #a1a1aa;
-    }
-  } */
-
   :root.dark {
     --primary: #ff3535;
     --primary-hover: #ca0c0c;

@@ -1,4 +1,5 @@
 import type { Article } from "../models/Article";
+import NoImageIcon from "../assets/no-image-icon.png";
 
 // Heroicons
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
@@ -13,8 +14,12 @@ export default function ArticleCard({ article }: ArticleCardProps) {
       <div className="group relative mx-auto aspect-square w-full max-w-[320px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-md">
         {/* Thumbnail that takes up 2/3 of the card */}
         <img
-          src={article.imageUrl || "https://via.placeholder.com/320?text=No+Image"}
+          src={article.imageUrl || NoImageIcon}
           alt={article.title}
+          onError={(e) => {
+            e.currentTarget.src = NoImageIcon;
+            e.currentTarget.onerror = null; // Prevents infinite loop if NoImageIcon fails to load
+          }}
           className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
 
