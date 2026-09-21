@@ -3,6 +3,9 @@ import type { Article } from "../models/Article";
 import { fetchArticlesByQuery } from "../services/SearchService";
 import ArticleCard from "../components/ArticleCard";
 
+// Heroicons
+import { ExclamationCircleIcon } from "@heroicons/react/24/solid";
+
 interface resultsGridProps {
   query?: string;
 }
@@ -22,10 +25,15 @@ export default function ResultsGrid({ query }: resultsGridProps) {
     setHasMoreArticles(true);
     const loadArticles = async () => {
       try {
+        setIsLoading(true);
+        setArticles([]); // Reset
         const results = await fetchArticlesByQuery('"' + searchQuery + '"', 1);
         setArticles(results);
-      } catch (err) {
+      } catch (error) {
         // TODO: Show error to UI probably later
+        console.error("Failed to load articles", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -57,7 +65,19 @@ export default function ResultsGrid({ query }: resultsGridProps) {
   return (
     <>
       <main className="p-8 bg-base min-h-screen">
-        <h1 className="text-center text-2xl font-bold text-content-muted mb-8">Showing results for: {searchQuery}</h1>
+        <h1 className="text-center text-2xl font-bold text-content-muted mb-8">
+          {articles.length > 0 ? (
+            "Showing results for: " + searchQuery
+          ) : isLoading ? (
+            "Searching sources..."
+          ) : (
+            <>
+              <ExclamationCircleIcon className="mx-auto h-10 w-10" />
+              <br />
+              {"No Results Found for: " + searchQuery}
+            </>
+          )}
+        </h1>
 
         {/* Main grid layout */}
         <div className="grid grid-cols-1 justify-center gap-4 sm:grid-cols-[repeat(2,320px)] lg:grid-cols-[repeat(4,320px)]">

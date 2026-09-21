@@ -65,6 +65,7 @@ export default function SearchBar({ onSearch }: { onSearch: (query: string) => v
           onChange={(e) => setText(e.target.value)}
           onFocus={() => setIsMenuOpen(true)}
           onBlur={() => setIsMenuOpen(false)}
+          maxLength={100}
           placeholder="Search the latest news..."
           className="w-full rounded-full bg-transparent py-3 pl-6 pr-28 text-content outline-none"
         />
