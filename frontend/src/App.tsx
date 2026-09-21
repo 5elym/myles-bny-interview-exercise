@@ -5,7 +5,7 @@ import "./index.css";
 import DarkModeToggle from "./components/DarkModeToggle";
 import { useSearch, type SearchFilters } from "./hooks/useSearch";
 
-function App() {
+export default function App() {
   const [hasSearched, setHasSearched] = useState(false);
   const [userQuery, setUserQuery] = useState("");
   const searchHook = useSearch();
@@ -67,5 +67,3 @@ function App() {
     </>
   );
 }
-
-export default App;

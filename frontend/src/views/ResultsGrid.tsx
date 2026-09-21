@@ -21,8 +21,6 @@ export default function ResultsGrid({
   hasMoreArticles,
   loadMore,
 }: ResultsGridProps) {
-  const [page, setPage] = useState(1);
-
   // For testing to extract query params
   // const urlParams = new URLSearchParams(window.location.search);
   // const searchQuery = urlParams.get("q") || query || "doctor who"; // default

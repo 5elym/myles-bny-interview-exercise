@@ -17,7 +17,12 @@ export default function SearchBar({ onSearch }: { onSearch: (query: string, filt
     return savedHistory ? savedHistory : [];
   });
 
-  const [filters, setFilters] = useState<SearchFilters>({});
+  const [filters, setFilters] = useState<SearchFilters>({
+    provider: "all",
+    category: "all",
+    fromDate: "",
+    toDate: "",
+  });
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -94,7 +99,6 @@ export default function SearchBar({ onSearch }: { onSearch: (query: string, filt
             <button
               type="button"
               onMouseDown={(e) => {
-                e.preventDefault();
                 setShowFilters((prev) => !prev);
               }}
               className="flex h-10 w-10 shrink-0 hover:cursor-pointer items-center justify-center rounded-full border border-content-muted/20 bg-base text-content hover:bg-content/5"

@@ -5,7 +5,8 @@ public record SearchParams(
         Integer page,
         String provider,
         String category,
-        String fromDate) {
+        String fromDate,
+        String toDate) {
 
     public SearchParams {
         if (page == null || page < 1)

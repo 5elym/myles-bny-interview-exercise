@@ -85,10 +85,10 @@ export default function FilterPanel({ filters, setFilters }: FilterPanelProps) {
 
           {/* To Date Filter */}
           <div className="flex flex-col">
-            <label className="mb-1 text-xs text-content-muted">From Date</label>
+            <label className="mb-1 text-xs text-content-muted">To Date</label>
             <input
               type="date"
-              name="fromDate"
+              name="toDate"
               value={filters.toDate}
               onChange={handleFilterSelect}
               className="rounded-lg border border-content-muted/20 bg-base p-2 text-sm text-content outline-none focus:primary"
