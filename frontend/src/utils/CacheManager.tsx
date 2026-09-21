@@ -1,6 +1,7 @@
 export const CacheManager = {
   get: (key: string) => {
-    return localStorage.getItem(key);
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : null;
   },
 
   save: (key: string, data: any[]) => {

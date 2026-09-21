@@ -8,7 +8,7 @@ export default function SearchBar({ onSearch }: { onSearch: (query: string) => v
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchHistory, setSearchHistory] = useState<string[]>(() => {
     const savedHistory = CacheManager.get("searchHistory");
-    return savedHistory ? JSON.parse(savedHistory) : [];
+    return savedHistory ? savedHistory : [];
   });
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
