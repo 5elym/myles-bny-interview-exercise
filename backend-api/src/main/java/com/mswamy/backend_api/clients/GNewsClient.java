@@ -12,7 +12,7 @@ import com.mswamy.backend_api.exceptions.APIRateLimitedException;
 import com.mswamy.backend_api.exceptions.InvalidQueryException;
 import com.mswamy.backend_api.exceptions.UnreachableProviderException;
 import com.mswamy.backend_api.models.ArticleDTO;
-import com.mswamy.backend_api.models.providers.GNewsProvider;
+import com.mswamy.backend_api.models.providers.GNewsResponse;
 import com.mswamy.backend_api.services.NewsProvider;
 
 @Service
@@ -25,7 +25,7 @@ public class GNewsClient implements NewsProvider {
 
     @Override
     public List<ArticleDTO> fetchArticles(String query, Integer page) {
-        GNewsProvider response = restClient.get()
+        GNewsResponse response = restClient.get()
                 .uri("https://gnews.io/api/v4/search?q={query}&page={page}&lang=en&apikey={apiKey}", query, page,
                         apiKey)
                 .retrieve()
@@ -39,7 +39,7 @@ public class GNewsClient implements NewsProvider {
                             throw new RuntimeException("Error Code from GNews API: " + res.getStatusCode().value());
                     }
                 })
-                .body(GNewsProvider.class);
+                .body(GNewsResponse.class);
 
         if (response == null || response.articles() == null) {
             return List.of();
@@ -50,7 +50,7 @@ public class GNewsClient implements NewsProvider {
                 .toList();
     }
 
-    private ArticleDTO mapToArticleDTO(GNewsProvider.Article article) {
+    private ArticleDTO mapToArticleDTO(GNewsResponse.Article article) {
         return new ArticleDTO(
                 article.title(),
                 article.description(),

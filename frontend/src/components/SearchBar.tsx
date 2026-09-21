@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { CacheManager } from "../utils/CacheManager";
 
+// Heroicons
 import XMarkIcon from "@heroicons/react/20/solid/XMarkIcon";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
 export default function SearchBar({ onSearch }: { onSearch: (query: string) => void }) {
   const [text, setText] = useState("");
@@ -72,9 +74,9 @@ export default function SearchBar({ onSearch }: { onSearch: (query: string) => v
 
         <button
           type="submit"
-          className="absolute right-1.5 rounded-full hover:cursor-pointer bg-primary px-6 py-2 font-semibold text-white transition-colors hover:bg-primary-hover"
+          className="absolute right-1.5 rounded-full hover:cursor-pointer bg-primary px-2 py-2 font-semibold text-white transition-colors hover:bg-primary-hover"
         >
-          Search
+          <MagnifyingGlassIcon className="h-7 w-7" />
         </button>
       </form>
 

@@ -12,7 +12,7 @@ import com.mswamy.backend_api.exceptions.APIRateLimitedException;
 import com.mswamy.backend_api.exceptions.InvalidQueryException;
 import com.mswamy.backend_api.exceptions.UnreachableProviderException;
 import com.mswamy.backend_api.models.ArticleDTO;
-import com.mswamy.backend_api.models.providers.GuardianProvider;
+import com.mswamy.backend_api.models.providers.GuardianResponse;
 import com.mswamy.backend_api.services.NewsProvider;
 
 @Service
@@ -25,7 +25,7 @@ public class GuardianClient implements NewsProvider {
 
     @Override
     public List<ArticleDTO> fetchArticles(String query, Integer page) {
-        GuardianProvider response = restClient.get()
+        GuardianResponse response = restClient.get()
                 .uri("https://content.guardianapis.com/search?q={query}&page={page}&lang=en&show-fields=trailText,thumbnail&api-key={apiKey}",
                         query, page, apiKey)
                 .retrieve()
@@ -39,7 +39,7 @@ public class GuardianClient implements NewsProvider {
                             throw new RuntimeException("Error Code from Guardian API: " + res.getStatusCode().value());
                     }
                 })
-                .body(GuardianProvider.class);
+                .body(GuardianResponse.class);
 
         if (response == null || response.response() == null) {
             return List.of();
@@ -50,7 +50,7 @@ public class GuardianClient implements NewsProvider {
                 .toList();
     }
 
-    private ArticleDTO mapToArticleDTO(GuardianProvider.Article article) {
+    private ArticleDTO mapToArticleDTO(GuardianResponse.Article article) {
         return new ArticleDTO(
                 article.title(),
                 article.fields() != null ? article.fields().trailText() : null,
