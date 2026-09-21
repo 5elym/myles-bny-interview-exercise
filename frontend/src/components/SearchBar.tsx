@@ -6,8 +6,9 @@ import FilterPanel from "./FilterPanel";
 import XMarkIcon from "@heroicons/react/20/solid/XMarkIcon";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/solid";
+import type { SearchFilters } from "../hooks/useSearch";
 
-export default function SearchBar({ onSearch }: { onSearch: (query: string) => void }) {
+export default function SearchBar({ onSearch }: { onSearch: (query: string, filters: SearchFilters) => void }) {
   const [text, setText] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
@@ -16,10 +17,12 @@ export default function SearchBar({ onSearch }: { onSearch: (query: string) => v
     return savedHistory ? savedHistory : [];
   });
 
+  const [filters, setFilters] = useState<SearchFilters>({});
+
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (text.trim()) {
-      onSearch(text);
+      onSearch(text, filters);
       saveSearchHistory(text);
       setIsMenuOpen(false);
 
@@ -54,7 +57,7 @@ export default function SearchBar({ onSearch }: { onSearch: (query: string) => v
 
   const handleHistoryClick = (recentSearch: string) => {
     setText(recentSearch);
-    onSearch(recentSearch);
+    onSearch(recentSearch, filters);
     setIsMenuOpen(false);
   };
 
@@ -91,7 +94,7 @@ export default function SearchBar({ onSearch }: { onSearch: (query: string) => v
             <button
               type="button"
               onMouseDown={(e) => {
-                e.preventDefault;
+                e.preventDefault();
                 setShowFilters((prev) => !prev);
               }}
               className="flex h-10 w-10 shrink-0 hover:cursor-pointer items-center justify-center rounded-full border border-content-muted/20 bg-base text-content hover:bg-content/5"
@@ -102,7 +105,7 @@ export default function SearchBar({ onSearch }: { onSearch: (query: string) => v
         </div>
       </form>
 
-      {showFilters && <FilterPanel />}
+      {showFilters && <FilterPanel filters={filters} setFilters={setFilters} />}
 
       {/* TODO: Make search history panel a component later */}
       {isMenuOpen && searchHistory.length > 0 && (

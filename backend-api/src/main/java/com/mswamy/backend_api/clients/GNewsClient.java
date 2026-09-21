@@ -41,7 +41,8 @@ public class GNewsClient implements NewsProvider {
                 })
                 .body(GNewsResponse.class);
 
-        if (response == null || response.articles() == null) {
+        if (response == null || response.articles() == null || response.articles().size() <= 0) {
+            System.out.println("No results found on GNews!");
             return List.of();
         }
 

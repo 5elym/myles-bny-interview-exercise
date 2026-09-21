@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
 import { fetchProviderNames } from "../services/SearchService";
+import type { SearchFilters } from "../hooks/useSearch";
 
-export default function FilterPanel() {
-  const [filters, setFilters] = useState({
-    provider: "all",
-    fromDate: "",
-    toDate: "",
-    category: "all",
-    // Maybe add more
-  });
+interface FilterPanelProps {
+  filters: SearchFilters;
+  setFilters: React.Dispatch<React.SetStateAction<SearchFilters>>;
+}
 
+export default function FilterPanel({ filters, setFilters }: FilterPanelProps) {
   const [providers, setProviders] = useState<string[]>([]);
 
   useEffect(() => {

@@ -41,7 +41,8 @@ public class GuardianClient implements NewsProvider {
                 })
                 .body(GuardianResponse.class);
 
-        if (response == null || response.response() == null) {
+        if (response == null || response.response() == null || response.response().results().size() <= 0) {
+            System.out.println("No results found on Guardian!");
             return List.of();
         }
 
