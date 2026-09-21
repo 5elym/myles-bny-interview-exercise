@@ -20,10 +20,10 @@ public class GuardianClient implements NewsProvider {
     private final RestClient restClient = RestClient.create();
 
     @Override
-    public List<ArticleDTO> fetchArticles(String query) {
+    public List<ArticleDTO> fetchArticles(String query, Integer page) {
         GuardianProvider response = restClient.get()
-                .uri("https://content.guardianapis.com/search?q={query}&lang=en&&show-fields=trailText,thumbnail&api-key={apiKey}",
-                        query, apiKey)
+                .uri("https://content.guardianapis.com/search?q={query}&page={page}&lang=en&show-fields=trailText,thumbnail&api-key={apiKey}",
+                        query, page, apiKey)
                 .retrieve()
                 .body(GuardianProvider.class);
 

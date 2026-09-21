@@ -71,7 +71,7 @@ export default function SearchBar({ onSearch }: { onSearch: (query: string) => v
 
         <button
           type="submit"
-          className="absolute right-1.5 rounded-full bg-primary px-6 py-2 font-semibold text-white transition-colors hover:bg-primary-hover"
+          className="absolute right-1.5 rounded-full hover:cursor-pointer bg-primary px-6 py-2 font-semibold text-white transition-colors hover:bg-primary-hover"
         >
           Search
         </button>

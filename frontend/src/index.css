@@ -5,7 +5,7 @@
   --color-primary-hover: var(--primary-hover);
 
   --color-base: var(--base); /* The main app background */
-  --color-surface: var(--surface); /* The background of cards/navbars */
+  --color-surface: var(--surface); /* The background of cards */
   --color-content: var(--content); /* Main text color */
   --color-content-muted: var(--content-muted); /* Subtitles, dates, borders */
 }
