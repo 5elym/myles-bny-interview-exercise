@@ -3,14 +3,16 @@ import SearchBar from "./components/SearchBar";
 import ResultsGrid from "./views/ResultsGrid";
 import "./index.css";
 import DarkModeToggle from "./components/DarkModeToggle";
+import { useSearch, type SearchFilters } from "./hooks/useSearch";
 
-function App() {
+export default function App() {
   const [hasSearched, setHasSearched] = useState(false);
   const [userQuery, setUserQuery] = useState("");
+  const searchHook = useSearch();
 
-  const executeSearch = async (searchQuery: string) => {
+  const handleExecuteSearch = (searchQuery: string, filters: SearchFilters) => {
     setHasSearched(true);
-    setUserQuery(searchQuery);
+    searchHook.search(searchQuery, filters);
   };
 
   return (
@@ -38,7 +40,7 @@ function App() {
           <div
             className={`w-full px-6 transition-all duration-700 ease-in-out ${hasSearched ? "max-w-4xl" : "max-w-3xl"}`}
           >
-            <SearchBar onSearch={executeSearch} />
+            <SearchBar onSearch={handleExecuteSearch} />
           </div>
         </header>
 
@@ -54,7 +56,7 @@ function App() {
         {/* Search Results */}
         {hasSearched && (
           <main className="w-full grow p-8">
-            <ResultsGrid query={userQuery} />
+            <ResultsGrid {...searchHook} />
           </main>
         )}
 
@@ -65,5 +67,3 @@ function App() {
     </>
   );
 }
-
-export default App;

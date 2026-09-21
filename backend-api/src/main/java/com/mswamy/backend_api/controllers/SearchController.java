@@ -6,11 +6,12 @@ import java.util.List;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mswamy.backend_api.models.ArticleDTO;
+import com.mswamy.backend_api.models.SearchParams;
 import com.mswamy.backend_api.services.NewsProvider;
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -25,22 +26,41 @@ public class SearchController {
     }
 
     @GetMapping
-    @Cacheable(value = "articles", key = "#q", condition = "#page == 1")
-    public List<ArticleDTO> searchNews(@RequestParam String q, @RequestParam(defaultValue = "1") Integer page) {
-        System.out.println("Results not found in cache for query: " + q + ". Fetching from providers...");
+    @Cacheable(value = "articles", key = "#params.hashCode()", condition = "#params.page() == 1")
+    public List<ArticleDTO> searchNews(@ModelAttribute SearchParams params) {
+        System.out.println("Results not found in cache for query: " + params.query() + ". Fetching from providers...");
 
         List<ArticleDTO> articles = new ArrayList<>();
 
+        boolean callAllProviders = params.provider() == null
+                || params.provider().isEmpty()
+                || params.provider().equalsIgnoreCase("all");
+
         for (NewsProvider provider : newsProviders) {
-            System.out.println("Fetching articles from: " + provider.getName() + " for query: " + q);
-            try {
-                articles.addAll(provider.fetchArticles(q, page));
-            } catch (Exception e) {
-                System.out.println(provider.getName() + " failed.");
-                System.out.println("Error: " + e.getMessage());
+            if (callAllProviders || provider.getName().equalsIgnoreCase(params.provider())) {
+                System.out.println("Fetching articles from: " + provider.getName() + " for query: " + params.query());
+                try {
+                    articles.addAll(provider.fetchArticles(params));
+                } catch (Exception e) {
+                    System.out.println(provider.getName() + " failed.");
+                    System.out.println("Error: " + e.getMessage());
+                }
+            } else {
+                System.out.println("Skipping provider: " + provider.getName());
             }
         }
 
         return articles;
+    }
+
+    @GetMapping("/providers")
+    public List<String> getProviders() {
+        System.out.println("Getting provider names");
+        List<String> providers = new ArrayList<>();
+        for (NewsProvider provider : newsProviders) {
+            providers.add(provider.getName());
+        }
+
+        return providers;
     }
 }

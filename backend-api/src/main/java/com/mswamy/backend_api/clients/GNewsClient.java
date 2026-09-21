@@ -7,11 +7,13 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.mswamy.backend_api.exceptions.APIRateLimitedException;
 import com.mswamy.backend_api.exceptions.InvalidQueryException;
 import com.mswamy.backend_api.exceptions.UnreachableProviderException;
 import com.mswamy.backend_api.models.ArticleDTO;
+import com.mswamy.backend_api.models.SearchParams;
 import com.mswamy.backend_api.models.providers.GNewsResponse;
 import com.mswamy.backend_api.services.NewsProvider;
 
@@ -19,15 +21,34 @@ import com.mswamy.backend_api.services.NewsProvider;
 @Order(1)
 public class GNewsClient implements NewsProvider {
     @Value("${gnews.api.key}")
-    private String apiKey;
+    private String API_KEY;
+    private final String BASE_API_URL = "https://gnews.io/api/v4/search";
 
     private final RestClient restClient = RestClient.create();
 
     @Override
-    public List<ArticleDTO> fetchArticles(String query, Integer page) {
+    public List<ArticleDTO> fetchArticles(SearchParams params) {
+
+        UriComponentsBuilder uri = UriComponentsBuilder.fromUriString(this.BASE_API_URL)
+                .queryParam("q", params.query())
+                .queryParam("page", params.page())
+                .queryParam("lang", "en")
+                .queryParam("apiKey", this.API_KEY);
+
+        if (params.category() != null) {
+            uri.queryParam("category", params.category());
+        }
+
+        // GNews requires ISO-8601 format: YYYY-MM-DDTHH:MM:SSZ
+        if (params.fromDate() != null) {
+            uri.queryParam("from", params.fromDate() + "T00:00:00Z");
+        }
+        if (params.toDate() != null) {
+            uri.queryParam("to", params.toDate() + "T00:00:00Z");
+        }
+
         GNewsResponse response = restClient.get()
-                .uri("https://gnews.io/api/v4/search?q={query}&page={page}&lang=en&apikey={apiKey}", query, page,
-                        apiKey)
+                .uri(uri.build().toUriString())
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, (request, res) -> {
                     // Error handling
@@ -41,7 +62,8 @@ public class GNewsClient implements NewsProvider {
                 })
                 .body(GNewsResponse.class);
 
-        if (response == null || response.articles() == null) {
+        if (response == null || response.articles() == null || response.articles().size() <= 0) {
+            System.out.println("No results found on GNews!");
             return List.of();
         }
 

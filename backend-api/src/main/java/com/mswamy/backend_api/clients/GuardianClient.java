@@ -7,11 +7,13 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.mswamy.backend_api.exceptions.APIRateLimitedException;
 import com.mswamy.backend_api.exceptions.InvalidQueryException;
 import com.mswamy.backend_api.exceptions.UnreachableProviderException;
 import com.mswamy.backend_api.models.ArticleDTO;
+import com.mswamy.backend_api.models.SearchParams;
 import com.mswamy.backend_api.models.providers.GuardianResponse;
 import com.mswamy.backend_api.services.NewsProvider;
 
@@ -19,15 +21,38 @@ import com.mswamy.backend_api.services.NewsProvider;
 @Order(2)
 public class GuardianClient implements NewsProvider {
     @Value("${guardian.api.key}")
-    private String apiKey;
+    private String API_KEY;
+    private final String BASE_API_URL = "https://content.guardianapis.com/search";
 
     private final RestClient restClient = RestClient.create();
 
     @Override
-    public List<ArticleDTO> fetchArticles(String query, Integer page) {
+    public List<ArticleDTO> fetchArticles(SearchParams params) {
+        UriComponentsBuilder uri = UriComponentsBuilder.fromUriString(this.BASE_API_URL)
+                .queryParam("q", params.query())
+                .queryParam("page", params.page())
+                .queryParam("lang", "en")
+                .queryParam("show-fields", "thumbnail,trailText")
+                .queryParam("api-key", this.API_KEY);
+
+        if (params.category() != null) {
+            String section = switch (params.category().toLowerCase()) {
+                case "sports" -> "sport";
+                case "entertainment" -> "culture";
+                default -> params.category().toLowerCase();
+            };
+            uri.queryParam("section", section);
+        }
+
+        if (params.fromDate() != null) {
+            uri.queryParam("from-date", params.fromDate());
+        }
+        if (params.toDate() != null) {
+            uri.queryParam("to-date", params.toDate());
+        }
+
         GuardianResponse response = restClient.get()
-                .uri("https://content.guardianapis.com/search?q={query}&page={page}&lang=en&show-fields=trailText,thumbnail&api-key={apiKey}",
-                        query, page, apiKey)
+                .uri(uri.build().toUriString())
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, (request, res) -> {
                     // Error handling
@@ -41,7 +66,8 @@ public class GuardianClient implements NewsProvider {
                 })
                 .body(GuardianResponse.class);
 
-        if (response == null || response.response() == null) {
+        if (response == null || response.response() == null || response.response().results().size() <= 0) {
+            System.out.println("No results found on Guardian!");
             return List.of();
         }
 
