@@ -1,22 +1,10 @@
 import { useState } from "react";
 import SearchBar from "./components/SearchBar";
-import type { Article } from "./models/Article";
 import ResultsGrid from "./views/ResultsGrid";
 import "./index.css";
 import DarkModeToggle from "./components/DarkModeToggle";
 
 function App() {
-  // const dummyArticle: Article = {
-  //   title: "Doctor Who set to return in 2028 after being put out to tender!",
-  //   summary:
-  //     "The BBC has announced that Doctor Who will return in 2028 after being put out to tender. The show will be produced by a new production company, and the BBC is looking for a new showrunner to take over the series. Fans of the show are excited to see what the future holds for the Doctor and their companions.",
-  //   url: "https://youtube.com/watch?v=dQw4w9WgXcQ",
-  //   imageUrl:
-  //     "https://easydrawingguides.com/wp-content/uploads/2017/04/how-to-draw-a-cartoon-tree-featured-image-1200.png",
-  //   publicationDate: new Date("2026-09-19"),
-  //   source: "Screen Rant",
-  // };
-
   const [hasSearched, setHasSearched] = useState(false);
   const [userQuery, setUserQuery] = useState("");
 
@@ -27,10 +15,12 @@ function App() {
 
   return (
     <>
-      <div className="flex min-h-screen flex-col bg-base">
+      <main className="flex min-h-screen flex-col bg-base">
         <header
           className={`relative flex w-full justify-center transition-all duration-700 ease-in-out ${
-            hasSearched ? "border-content-muted bg-surface py-5 shadow-sm" : "bg-transparent pt-[45vh]"
+            hasSearched
+              ? "sticky top-0 z-100 border-content-muted bg-surface py-2 shadow-sm"
+              : "bg-transparent pt-[45vh]"
           }`}
         >
           {/* Website Logo*/}
@@ -50,16 +40,16 @@ function App() {
           >
             <SearchBar onSearch={executeSearch} />
           </div>
-
-          {/* Dark Mode Toggle */}
-          <div
-            className={`absolute right-8 top-1/2 -translate-y-1/2 transition-all duration-700 ease-in-out ${
-              hasSearched ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            <DarkModeToggle />
-          </div>
         </header>
+
+        {/* Dark Mode Toggle */}
+        <div
+          className={`fixed right-6 z-100 transition-all duration-700 ease-in-out ${
+            hasSearched ? "top-4" : "top-[calc(100dvh-5rem)]" // Push to bottom of screen
+          }`}
+        >
+          <DarkModeToggle />
+        </div>
 
         {/* Search Results */}
         {hasSearched && (
@@ -67,7 +57,11 @@ function App() {
             <ResultsGrid query={userQuery} />
           </main>
         )}
-      </div>
+
+        <footer className="sticky mt-auto bottom-0 flex bg-base text-sm text-content pl-5 border border-content-muted">
+          &copy; Myles Swamy 2026
+        </footer>
+      </main>
     </>
   );
 }
