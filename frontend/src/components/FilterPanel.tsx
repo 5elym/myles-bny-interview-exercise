@@ -1,13 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { fetchProviderNames } from "../services/SearchService";
 
 export default function FilterPanel() {
   const [filters, setFilters] = useState({
     provider: "all",
-    fromDate: new Date().toDateString(),
-    toDate: new Date().toDateString(),
+    fromDate: "",
+    toDate: "",
     category: "all",
     // Maybe add more
   });
+
+  const [providers, setProviders] = useState<string[]>([]);
+
+  useEffect(() => {
+    const getProviders = async () => {
+      try {
+        const retrievedProviders = await fetchProviderNames();
+        setProviders(retrievedProviders);
+      } catch (error) {
+        console.error("Failed to fetch providers", error);
+      }
+    };
+
+    getProviders();
+  }, []);
 
   const handleFilterSelect = (e: any) => {
     const { name, value } = e.target;
@@ -29,8 +45,11 @@ export default function FilterPanel() {
             >
               {/* TODO: Retrieve provider list*/}
               <option value="all">All Providers</option>
-              <option value="gnews">GNews</option>
-              <option value="nyt">New York Times</option>
+              {providers.map((provider) => (
+                <option key={provider} value={provider}>
+                  {provider}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -72,13 +91,11 @@ export default function FilterPanel() {
             <input
               type="date"
               name="fromDate"
-              value={filters.fromDate}
+              value={filters.toDate}
               onChange={handleFilterSelect}
               className="rounded-lg border border-content-muted/20 bg-base p-2 text-sm text-content outline-none focus:primary"
             />
           </div>
-
-          {/* Add more text inputs for exactPhrase, etc., following the same pattern */}
         </div>
       </div>
     </>

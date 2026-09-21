@@ -10,9 +10,22 @@ export const fetchArticlesByQuery = async (query: string, page: number): Promise
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const data = await response.json();
+    return await response.json();
+  } catch (error) {
+    console.error("API Fetch Error:", error);
+    throw error;
+  }
+};
 
-    return data;
+export const fetchProviderNames = async () => {
+  try {
+    const response = await fetch(`${BASE_API_URL}/search/providers`);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
   } catch (error) {
     console.error("API Fetch Error:", error);
     throw error;
