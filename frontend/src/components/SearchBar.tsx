@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { CacheManager } from "../utils/CacheManager";
+import FilterPanel from "./FilterPanel";
 
 // Heroicons
 import XMarkIcon from "@heroicons/react/20/solid/XMarkIcon";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/solid";
 
 export default function SearchBar({ onSearch }: { onSearch: (query: string) => void }) {
   const [text, setText] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
   const [searchHistory, setSearchHistory] = useState<string[]>(() => {
     const savedHistory = CacheManager.getArray("searchHistory");
     return savedHistory ? savedHistory : [];
@@ -72,18 +75,40 @@ export default function SearchBar({ onSearch }: { onSearch: (query: string) => v
           className="w-full rounded-full bg-transparent py-3 pl-6 pr-28 text-content outline-none"
         />
 
-        <button
-          type="submit"
-          className="absolute right-1.5 rounded-full hover:cursor-pointer bg-primary px-2 py-2 font-semibold text-white transition-colors hover:bg-primary-hover"
-        >
-          <MagnifyingGlassIcon className="h-7 w-7" />
-        </button>
+        {/* Wrapper for both buttons */}
+        <div className="flex items-center">
+          <button
+            type="submit"
+            className="flex h-10 items-center justify-center rounded-full hover:cursor-pointer bg-primary px-2 py-2 font-semibold text-white transition-colors hover:bg-primary-hover"
+          >
+            <MagnifyingGlassIcon className="h-7 w-7" />
+          </button>
+
+          {/* Specific wrapper for filter button */}
+          <div
+            className={`overflow-hidden transition-all duration-500 ease-in-out flex items-center ${isMenuOpen || showFilters ? "w-12 ml-2 opacity-100" : "w-0 ml-0 opacity-0"}`}
+          >
+            <button
+              type="button"
+              onMouseDown={(e) => {
+                e.preventDefault;
+                setShowFilters((prev) => !prev);
+              }}
+              className="flex h-10 w-10 shrink-0 hover:cursor-pointer items-center justify-center rounded-full border border-content-muted/20 bg-base text-content hover:bg-content/5"
+            >
+              <AdjustmentsHorizontalIcon className="h-7 w-7 fill-primary" />
+            </button>
+          </div>
+        </div>
       </form>
 
+      {showFilters && <FilterPanel />}
+
+      {/* TODO: Make search history panel a component later */}
       {isMenuOpen && searchHistory.length > 0 && (
         <div className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-content-muted/20 bg-surface shadow-xl">
           <ul className="flex flex-col py-2">
-            <li className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-content-muted">Recent</li>
+            <li className="px-4 py-2 text-xs font-semibold tracking-wider text-content-muted">RECENT</li>
 
             {searchHistory.map((item, index) => (
               <li
