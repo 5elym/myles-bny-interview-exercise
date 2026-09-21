@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { CacheManager } from "../utils/CacheManager";
 
 import XMarkIcon from "@heroicons/react/20/solid/XMarkIcon";
 
@@ -6,7 +7,7 @@ export default function SearchBar({ onSearch }: { onSearch: (query: string) => v
   const [text, setText] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchHistory, setSearchHistory] = useState<string[]>(() => {
-    const savedHistory = localStorage.getItem("searchHistory");
+    const savedHistory = CacheManager.get("searchHistory");
     return savedHistory ? JSON.parse(savedHistory) : [];
   });
 
@@ -17,6 +18,7 @@ export default function SearchBar({ onSearch }: { onSearch: (query: string) => v
       saveSearchHistory(text);
       setIsMenuOpen(false);
 
+      // Unfocus search bar
       if (document.activeElement instanceof HTMLFormElement) {
         document.activeElement.blur();
       }
@@ -29,7 +31,7 @@ export default function SearchBar({ onSearch }: { onSearch: (query: string) => v
       const updatedHistory = [query, ...prevHistory.filter((item) => item !== query)];
       const finalHistory = updatedHistory.slice(0, 5); // Keep only the last 5 searches
 
-      localStorage.setItem("searchHistory", JSON.stringify(finalHistory));
+      CacheManager.save("searchHistory", finalHistory);
 
       return finalHistory;
     });
@@ -39,7 +41,7 @@ export default function SearchBar({ onSearch }: { onSearch: (query: string) => v
     setSearchHistory((prev) => {
       const updated = prev.filter((_, i) => i !== index);
 
-      localStorage.setItem("searchHistory", JSON.stringify(updated));
+      CacheManager.save("searchHistory", updated);
 
       return updated;
     });
