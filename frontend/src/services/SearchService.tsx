@@ -1,11 +1,10 @@
 import type { Article } from "../models/Article";
 
-const BASE_API_URL = "http://localhost:8080"; // Your backend port
+const BASE_API_URL = "http://localhost:8080";
 
-export const fetchArticlesByQuery = async (query: string): Promise<Article[]> => {
+export const fetchArticlesByQuery = async (query: string, page: number): Promise<Article[]> => {
   try {
-    // Construct the full URL with the query parameter appended
-    const response = await fetch(`${BASE_API_URL}/search?q=${encodeURIComponent(query)}`);
+    const response = await fetch(`${BASE_API_URL}/search?q=${encodeURIComponent(query)}&page=${page}`);
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);

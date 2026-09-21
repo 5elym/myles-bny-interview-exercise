@@ -25,8 +25,8 @@ public class SearchController {
     }
 
     @GetMapping
-    @Cacheable(value = "articles", key = "#q")
-    public List<ArticleDTO> searchNews(@RequestParam String q) {
+    @Cacheable(value = "articles", key = "#q", condition = "#page == 1")
+    public List<ArticleDTO> searchNews(@RequestParam String q, @RequestParam(defaultValue = "1") Integer page) {
         System.out.println("Results not found in cache for query: " + q + ". Fetching from providers...");
 
         List<ArticleDTO> articles = new ArrayList<>();
@@ -34,7 +34,7 @@ public class SearchController {
         for (NewsProvider provider : newsProviders) {
             System.out.println("Fetching articles from: " + provider.getName() + " for query: " + q);
             try {
-                articles.addAll(provider.fetchArticles(q));
+                articles.addAll(provider.fetchArticles(q, page));
             } catch (Exception e) {
                 System.out.println(provider.getName() + " failed.");
                 System.out.println("Error: " + e.getMessage());
