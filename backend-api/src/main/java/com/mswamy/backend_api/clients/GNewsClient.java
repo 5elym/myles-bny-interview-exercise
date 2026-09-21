@@ -4,9 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import com.mswamy.backend_api.exceptions.APIRateLimitedException;
+import com.mswamy.backend_api.exceptions.UnreachableProviderException;
 import com.mswamy.backend_api.models.ArticleDTO;
 import com.mswamy.backend_api.models.providers.GNewsProvider;
 import com.mswamy.backend_api.services.NewsProvider;
@@ -25,6 +28,15 @@ public class GNewsClient implements NewsProvider {
                 .uri("https://gnews.io/api/v4/search?q={query}&page={page}&lang=en&apikey={apiKey}", query, page,
                         apiKey)
                 .retrieve()
+                .onStatus(HttpStatusCode::isError, (request, res) -> {
+                    // Error handling
+                    switch (res.getStatusCode().value()) {
+                        case 403, 429 -> throw new APIRateLimitedException("GNews API rate limit reached!");
+                        case 500, 503 -> throw new UnreachableProviderException("Cannot reach the GNews API!");
+                        default ->
+                            throw new RuntimeException("Error Code from GNews API: " + res.getStatusCode().value());
+                    }
+                })
                 .body(GNewsProvider.class);
 
         if (response == null || response.articles() == null) {

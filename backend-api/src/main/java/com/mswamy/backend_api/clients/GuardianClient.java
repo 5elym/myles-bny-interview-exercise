@@ -4,9 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import com.mswamy.backend_api.exceptions.APIRateLimitedException;
+import com.mswamy.backend_api.exceptions.UnreachableProviderException;
 import com.mswamy.backend_api.models.ArticleDTO;
 import com.mswamy.backend_api.models.providers.GuardianProvider;
 import com.mswamy.backend_api.services.NewsProvider;
@@ -25,6 +28,15 @@ public class GuardianClient implements NewsProvider {
                 .uri("https://content.guardianapis.com/search?q={query}&page={page}&lang=en&show-fields=trailText,thumbnail&api-key={apiKey}",
                         query, page, apiKey)
                 .retrieve()
+                .onStatus(HttpStatusCode::isError, (request, res) -> {
+                    // Error handling
+                    switch (res.getStatusCode().value()) {
+                        case 403, 429 -> throw new APIRateLimitedException("Guardian API rate limit reached!");
+                        case 500, 503 -> throw new UnreachableProviderException("Cannot reach the Guardian API!");
+                        default ->
+                            throw new RuntimeException("Error Code from Guardian API: " + res.getStatusCode().value());
+                    }
+                })
                 .body(GuardianProvider.class);
 
         if (response == null || response.response() == null) {
