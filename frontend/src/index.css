@@ -20,7 +20,7 @@
     --base: #f9fafb;
     --surface: #ffffff;
     --content: #111827;
-    --content-muted: #6b7280;
+    --content-muted: #c0c3c9;
   }
 
   /* Dark Mode */
@@ -28,9 +28,9 @@
   :root.dark {
     --primary: #ff3535;
     --primary-hover: #ca0c0c;
-    --base: #09090b;
+    --base: #282829;
     --surface: #18181b;
-    --content: #f9fafb;
-    --content-muted: #a1a1aa;
+    --content: #fcfcfc;
+    --content-muted: #4b4c4e;
   }
 }

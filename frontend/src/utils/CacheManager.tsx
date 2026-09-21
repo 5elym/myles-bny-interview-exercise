@@ -1,18 +1,31 @@
 export const CacheManager = {
-  get: (key: string) => {
+  getArray: (key: string): any[] | null => {
     const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) : null;
+    if (!data) return null;
+    try {
+      return JSON.parse(data);
+    } catch {
+      return null;
+    }
   },
 
-  save: (key: string, data: any[]) => {
-    return localStorage.setItem(key, JSON.stringify(data));
+  saveArray: (key: string, data: any[]): void => {
+    localStorage.setItem(key, JSON.stringify(data));
   },
 
-  clear: () => {
-    return localStorage.clear();
+  getString: (key: string): string | null => {
+    return localStorage.getItem(key);
   },
 
-  delete: (key: string) => {
-    return localStorage.removeItem(key);
+  saveString: (key: string, value: string): void => {
+    localStorage.setItem(key, value);
+  },
+
+  delete: (key: string): void => {
+    localStorage.removeItem(key);
+  },
+
+  clear: (): void => {
+    localStorage.clear();
   },
 };

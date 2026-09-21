@@ -3,6 +3,7 @@ import SearchBar from "./components/SearchBar";
 import type { Article } from "./models/Article";
 import ResultsGrid from "./views/ResultsGrid";
 import "./index.css";
+import DarkModeToggle from "./components/DarkModeToggle";
 
 function App() {
   // const dummyArticle: Article = {
@@ -48,6 +49,15 @@ function App() {
             className={`w-full px-6 transition-all duration-700 ease-in-out ${hasSearched ? "max-w-4xl" : "max-w-3xl"}`}
           >
             <SearchBar onSearch={executeSearch} />
+          </div>
+
+          {/* Dark Mode Toggle */}
+          <div
+            className={`absolute right-8 top-1/2 -translate-y-1/2 transition-all duration-700 ease-in-out ${
+              hasSearched ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <DarkModeToggle />
           </div>
         </header>
 

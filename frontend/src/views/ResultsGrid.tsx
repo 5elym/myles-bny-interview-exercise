@@ -30,7 +30,7 @@ export default function ResultsGrid({ query }: resultsGridProps) {
   return (
     <>
       <main className="p-8 bg-base min-h-screen">
-        <h1 className="text-3xl font-bold mb-8">Results for: {searchQuery}</h1>
+        <h1 className="text-3xl font-bold mb-8 text-content">Results for: {searchQuery}</h1>
 
         {/* Main grid layout */}
         <div className="grid grid-cols-1 justify-center gap-4 sm:grid-cols-[repeat(2,320px)] lg:grid-cols-[repeat(4,320px)]">

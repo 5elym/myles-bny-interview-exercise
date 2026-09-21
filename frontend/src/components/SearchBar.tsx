@@ -7,7 +7,7 @@ export default function SearchBar({ onSearch }: { onSearch: (query: string) => v
   const [text, setText] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchHistory, setSearchHistory] = useState<string[]>(() => {
-    const savedHistory = CacheManager.get("searchHistory");
+    const savedHistory = CacheManager.getArray("searchHistory");
     return savedHistory ? savedHistory : [];
   });
 
@@ -31,7 +31,7 @@ export default function SearchBar({ onSearch }: { onSearch: (query: string) => v
       const updatedHistory = [query, ...prevHistory.filter((item) => item !== query)];
       const finalHistory = updatedHistory.slice(0, 5); // Keep only the last 5 searches
 
-      CacheManager.save("searchHistory", finalHistory);
+      CacheManager.saveArray("searchHistory", finalHistory);
 
       return finalHistory;
     });
@@ -41,7 +41,7 @@ export default function SearchBar({ onSearch }: { onSearch: (query: string) => v
     setSearchHistory((prev) => {
       const updated = prev.filter((_, i) => i !== index);
 
-      CacheManager.save("searchHistory", updated);
+      CacheManager.saveArray("searchHistory", updated);
 
       return updated;
     });
