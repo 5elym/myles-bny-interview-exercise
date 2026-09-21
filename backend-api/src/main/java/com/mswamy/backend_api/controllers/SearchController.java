@@ -3,6 +3,7 @@ package com.mswamy.backend_api.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,10 @@ public class SearchController {
     }
 
     @GetMapping
+    @Cacheable(value = "articles", key = "#q")
     public List<ArticleDTO> searchNews(@RequestParam String q) {
+        System.out.println("Results not found in cache for query: " + q + ". Fetching from providers...");
+
         List<ArticleDTO> articles = new ArrayList<>();
 
         for (NewsProvider provider : newsProviders) {
