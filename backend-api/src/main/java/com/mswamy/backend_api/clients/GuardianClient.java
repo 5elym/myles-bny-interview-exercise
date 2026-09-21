@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 import com.mswamy.backend_api.exceptions.APIRateLimitedException;
+import com.mswamy.backend_api.exceptions.InvalidQueryException;
 import com.mswamy.backend_api.exceptions.UnreachableProviderException;
 import com.mswamy.backend_api.models.ArticleDTO;
 import com.mswamy.backend_api.models.providers.GuardianProvider;
@@ -31,6 +32,7 @@ public class GuardianClient implements NewsProvider {
                 .onStatus(HttpStatusCode::isError, (request, res) -> {
                     // Error handling
                     switch (res.getStatusCode().value()) {
+                        case 400 -> throw new InvalidQueryException("Guardian API received an invalid request!");
                         case 403, 429 -> throw new APIRateLimitedException("Guardian API rate limit reached!");
                         case 500, 503 -> throw new UnreachableProviderException("Cannot reach the Guardian API!");
                         default ->
