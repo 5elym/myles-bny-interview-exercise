@@ -29,13 +29,15 @@ export default function DarkModeToggle() {
   }, [isDark]);
 
   return (
-    <button
-      type="button"
-      onClick={() => setIsDark((prev) => !prev)}
-      aria-label="Toggle theme"
-      className="flex h-10 w-10 hover:cursor-pointer items-center justify-center rounded-full border border-content-muted/20 bg-surface text-content transition-colors hover:bg-base"
-    >
-      {isDark ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
-    </button>
+    <>
+      <button
+        type="button"
+        onClick={() => setIsDark((prev) => !prev)}
+        aria-label="Toggle theme"
+        className="flex h-10 w-10 hover:cursor-pointer items-center justify-center rounded-full border border-content-muted/20 bg-surface text-content transition-colors hover:bg-base"
+      >
+        {isDark ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
+      </button>
+    </>
   );
 }
