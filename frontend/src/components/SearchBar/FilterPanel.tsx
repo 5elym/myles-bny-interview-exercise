@@ -34,7 +34,7 @@ export default function FilterPanel({ filters, setFilters }: FilterPanelProps) {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {/* Provider Dropdown */}
           <div className="flex flex-col">
-            <label className="mb-1 text-xs text-content-muted">Provider</label>
+            <label className="mb-1 text-xs text-content-muted font-semibold">PROVIDER</label>
             <select
               name="provider"
               value={filters.provider}
@@ -53,7 +53,7 @@ export default function FilterPanel({ filters, setFilters }: FilterPanelProps) {
 
           {/* Category Dropdown */}
           <div className="flex flex-col">
-            <label className="mb-1 text-xs text-content-muted">Category</label>
+            <label className="mb-1 text-xs text-content-muted font-semibold">CATEGORY</label>
             <select
               name="category"
               value={filters.category}
@@ -73,7 +73,7 @@ export default function FilterPanel({ filters, setFilters }: FilterPanelProps) {
 
           {/* From Date Filter */}
           <div className="flex flex-col">
-            <label className="mb-1 text-xs text-content-muted">From Date</label>
+            <label className="mb-1 text-xs text-content-muted font-semibold">FROM DATE</label>
             <input
               type="date"
               name="fromDate"
@@ -85,7 +85,7 @@ export default function FilterPanel({ filters, setFilters }: FilterPanelProps) {
 
           {/* To Date Filter */}
           <div className="flex flex-col">
-            <label className="mb-1 text-xs text-content-muted">To Date</label>
+            <label className="mb-1 text-xs text-content-muted font-semibold">TO DATE</label>
             <input
               type="date"
               name="toDate"

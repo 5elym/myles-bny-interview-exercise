@@ -1,7 +1,6 @@
 import type { Article } from "../../models/Article";
 
 // Heroicons
-import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
 import ArticleCardFooter from "./ArticleCardFooter";
 import ArticleCardImage from "./ArticleCardImage";
 import ArticleCardSummary from "./ArticleCardSummary";

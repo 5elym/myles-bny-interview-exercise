@@ -26,20 +26,23 @@ public class GNewsClient implements NewsProvider {
 
     @Value("${gnews.api.key}")
     private String API_KEY;
-    private final String BASE_API_URL = "https://gnews.io/api/v4/search";
+    private static final String SEARCH_API_URL = "https://gnews.io/api/v4/search";
+    private static final String TOP_HEADLINES_API_URL = "https://gnews.io/api/v4/top-headlines"; // For category filter
 
     private final RestClient restClient = RestClient.create();
 
     @Override
     public List<ArticleDTO> fetchArticles(SearchParams params) {
+        boolean hasCategory = params.category() != null && !params.category().isBlank();
+        String apiUrl = hasCategory ? TOP_HEADLINES_API_URL : SEARCH_API_URL;
 
-        UriComponentsBuilder uri = UriComponentsBuilder.fromUriString(this.BASE_API_URL)
+        UriComponentsBuilder uri = UriComponentsBuilder.fromUriString(apiUrl)
                 .queryParam("q", params.query())
                 .queryParam("page", params.page())
                 .queryParam("lang", "en")
                 .queryParam("apikey", this.API_KEY);
 
-        if (params.category() != null) {
+        if (hasCategory) {
             uri.queryParam("category", params.category());
         }
 
