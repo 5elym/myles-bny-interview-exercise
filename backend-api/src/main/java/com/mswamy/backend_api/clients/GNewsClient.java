@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mswamy.backend_api.exceptions.APIRateLimitedException;
 import com.mswamy.backend_api.exceptions.InvalidQueryException;
@@ -20,6 +22,8 @@ import com.mswamy.backend_api.services.NewsProvider;
 @Service
 @Order(1)
 public class GNewsClient implements NewsProvider {
+    private static final Logger LOGGER = LoggerFactory.getLogger(GNewsClient.class);
+
     @Value("${gnews.api.key}")
     private String API_KEY;
     private final String BASE_API_URL = "https://gnews.io/api/v4/search";
@@ -63,7 +67,7 @@ public class GNewsClient implements NewsProvider {
                 .body(GNewsResponse.class);
 
         if (response == null || response.articles() == null || response.articles().size() <= 0) {
-            System.out.println("No results found on GNews!");
+            LOGGER.info("No results found on GNews");
             return List.of();
         }
 

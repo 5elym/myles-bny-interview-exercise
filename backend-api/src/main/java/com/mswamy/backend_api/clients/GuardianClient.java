@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mswamy.backend_api.exceptions.APIRateLimitedException;
 import com.mswamy.backend_api.exceptions.InvalidQueryException;
@@ -20,6 +22,8 @@ import com.mswamy.backend_api.services.NewsProvider;
 @Service
 @Order(2)
 public class GuardianClient implements NewsProvider {
+    private static final Logger LOGGER = LoggerFactory.getLogger(GuardianClient.class);
+
     @Value("${guardian.api.key}")
     private String API_KEY;
     private final String BASE_API_URL = "https://content.guardianapis.com/search";
@@ -67,7 +71,7 @@ public class GuardianClient implements NewsProvider {
                 .body(GuardianResponse.class);
 
         if (response == null || response.response() == null || response.response().results().size() <= 0) {
-            System.out.println("No results found on Guardian!");
+            LOGGER.info("No results found on Guardian");
             return List.of();
         }
 
