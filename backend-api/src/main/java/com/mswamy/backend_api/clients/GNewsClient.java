@@ -33,7 +33,7 @@ public class GNewsClient implements NewsProvider {
                 .queryParam("q", params.query())
                 .queryParam("page", params.page())
                 .queryParam("lang", "en")
-                .queryParam("apiKey", this.API_KEY);
+                .queryParam("apikey", this.API_KEY);
 
         if (params.category() != null) {
             uri.queryParam("category", params.category());
