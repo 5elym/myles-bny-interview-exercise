@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { fetchProviderNames } from "../services/SearchService";
-import type { SearchFilters } from "../hooks/useSearch";
+import { fetchProviderNames } from "../../services/SearchService";
+import type { SearchFilters } from "../../hooks/useSearch";
 
 interface FilterPanelProps {
   filters: SearchFilters;

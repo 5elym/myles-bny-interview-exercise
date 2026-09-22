@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { CacheManager } from "../utils/CacheManager";
+import { CacheManager } from "../../utils/CacheManager";
 import FilterPanel from "./FilterPanel";
 
-import type { SearchFilters } from "../hooks/useSearch";
+import type { SearchFilters } from "../../hooks/useSearch";
 import SearchHistoryPanel from "./SearchHistoryPanel";
 import SearchButton from "./SearchButton";
 import FilterButton from "./FilterButton";

@@ -1,4 +1,4 @@
-import type { Article } from "../models/Article";
+import type { Article } from "../../models/Article";
 
 // Heroicons
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";

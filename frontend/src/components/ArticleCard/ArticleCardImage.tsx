@@ -1,4 +1,4 @@
-import NoImageIcon from "../assets/no-image-icon.png";
+import NoImageIcon from "../../assets/no-image-icon.png";
 
 interface ArticleCardImageProps {
   imageUrl?: string;
