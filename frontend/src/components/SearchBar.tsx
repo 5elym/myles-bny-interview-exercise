@@ -66,34 +66,40 @@ export default function SearchBar({ onSearch }: { onSearch: (query: string, filt
   };
 
   return (
-    <div className="relative w-full">
-      <form
-        onSubmit={handleSubmit}
-        className="relative flex w-full items-center rounded-full border border-content-muted bg-base p-1 shadow-sm transition-shadow hover:shadow-md focus-within:ring-2 focus-within:ring-primary"
-      >
-        <input
-          type="text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          onFocus={() => setIsMenuOpen(true)}
-          onBlur={() => setIsMenuOpen(false)}
-          maxLength={100}
-          placeholder="Search the latest news..."
-          className="w-full rounded-full bg-transparent py-3 pl-6 pr-28 text-content outline-none"
-        />
+    <>
+      <div className="relative w-full">
+        <form
+          onSubmit={handleSubmit}
+          className="relative flex w-full items-center rounded-full border border-content-muted bg-base p-1 shadow-sm transition-shadow hover:shadow-md focus-within:ring-2 focus-within:ring-primary"
+        >
+          <input
+            type="text"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            onFocus={() => setIsMenuOpen(true)}
+            onBlur={() => setIsMenuOpen(false)}
+            maxLength={100}
+            placeholder="Search the latest news..."
+            className="w-full rounded-full bg-transparent py-3 pl-6 pr-28 text-content outline-none"
+          />
 
-        {/* Wrapper for both buttons */}
-        <div className="flex items-center">
-          <SearchButton />
-          <FilterButton isMenuOpen={isMenuOpen} showFilters={showFilters} setShowFilters={setShowFilters} />
-        </div>
-      </form>
+          {/* Wrapper for both buttons */}
+          <div className="flex items-center">
+            <SearchButton />
+            <FilterButton isMenuOpen={isMenuOpen} showFilters={showFilters} setShowFilters={setShowFilters} />
+          </div>
+        </form>
 
-      {showFilters && <FilterPanel filters={filters} setFilters={setFilters} />}
+        {showFilters && <FilterPanel filters={filters} setFilters={setFilters} />}
 
-      {isMenuOpen && searchHistory.length > 0 && (
-        <SearchHistoryPanel history={searchHistory} onSelect={handleHistoryClick} onDelete={deleteSearchHistoryItem} />
-      )}
-    </div>
+        {isMenuOpen && searchHistory.length > 0 && (
+          <SearchHistoryPanel
+            history={searchHistory}
+            onSelect={handleHistoryClick}
+            onDelete={deleteSearchHistoryItem}
+          />
+        )}
+      </div>
+    </>
   );
 }
